@@ -13,6 +13,12 @@ namespace UPC.SmartRetention.UI
         public FormEstudiantes()
         {
             InitializeComponent();
+
+            // Estilo base (igual que el FormLogin)
+            this.BackColor = System.Drawing.Color.FromArgb(30, 30, 30);
+            this.BackgroundImage = Properties.Resources.album_joji;
+            this.BackgroundImageLayout = ImageLayout.Stretch;
+            this.DoubleBuffered = true;
         }
 
         private void FormEstudiantes_Load(object sender, EventArgs e)

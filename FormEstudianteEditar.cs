@@ -14,7 +14,12 @@ namespace UPC.SmartRetention.UI
         public FormEstudianteEditar()
         {
             InitializeComponent();
-            _modoEditar = false;
+
+            // Estilo base (igual que el FormLogin)
+            this.BackColor = System.Drawing.Color.FromArgb(30, 30, 30);
+            this.BackgroundImage = Properties.Resources.album_joji;
+            this.BackgroundImageLayout = ImageLayout.Stretch;
+            this.DoubleBuffered = true;
         }
 
         public FormEstudianteEditar(Estudiante est) : this()

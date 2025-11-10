@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Data.Entity;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using UPC.SmartRetention.UI;
+
 
 namespace UPC.SmartRetention.UI
 {
@@ -13,6 +17,9 @@ namespace UPC.SmartRetention.UI
         public FormLogin()
         {
             InitializeComponent();
+
+            Database.SetInitializer<ProyectoVisualEntities>(null);
+
             RedondearBordes();
 
             this.BackgroundImage = Properties.Resources.album_joji;
@@ -20,7 +27,7 @@ namespace UPC.SmartRetention.UI
             this.DoubleBuffered = true;
 
             SetPlaceholder(txtUsuario, "Usuario");
-            SetPlaceholder(txtContrasena, "Contraseña");
+            SetPlaceholder(txtContraseña, "Contraseña");
 
             CenterPanel();
             this.Resize += (s, e) => CenterPanel();
@@ -33,11 +40,11 @@ namespace UPC.SmartRetention.UI
                 CreateRoundRectRgn(0, 0, panelLogin.Width, panelLogin.Height, 30, 30)
             );
 
-            // Redondear los cuadros de texto
+  
             RedondearControl(txtUsuario, 10);
-            RedondearControl(txtContrasena, 10);
+            RedondearControl(txtContraseña, 10);
 
-            // Redondear botón
+   
             RedondearControl(btnLogin, 15);
         }
 
@@ -52,7 +59,7 @@ namespace UPC.SmartRetention.UI
             control.Region = new Region(path);
         }
 
-        // Import para crear regiones redondeadas
+
         [System.Runtime.InteropServices.DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
         private static extern IntPtr CreateRoundRectRgn(
             int nLeftRect, int nTopRect, int nRightRect, int nBottomRect,
@@ -63,6 +70,7 @@ namespace UPC.SmartRetention.UI
         {
             this.Opacity = 0;
             TimerFade.Start();
+
         }
 
         private void TimerFade_Tick(object sender, EventArgs e)
@@ -73,28 +81,33 @@ namespace UPC.SmartRetention.UI
                 TimerFade.Stop();
         }
 
-        private void BtnLogin_Click(object sender, EventArgs e)
+        private void btnLogin_Click_1(object sender, EventArgs e)
         {
-            string usuario = txtUsuario.Text.Trim();
-            string contrasena = txtContrasena.Text.Trim();
+            string correo = txtUsuario.Text.Trim();
+            string contrasena = txtContraseña.Text.Trim();
 
-            if (string.IsNullOrEmpty(usuario) || string.IsNullOrEmpty(contrasena) ||
-                usuario == "Usuario" || contrasena == "Contraseña")
+            if (string.IsNullOrEmpty(correo) || string.IsNullOrEmpty(contrasena))
             {
-                MessageBox.Show("Ingrese usuario y contraseña", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Por favor ingrese usuario y contraseña.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // TODO: conectar a la base de datos y validar usuario; por ahora demo:
-            if (usuario == "admin" && contrasena == "1234")
+            var db = ConexionGlobal.Contexto;
+            // tu código de login...
+
             {
-                MessageBox.Show("Inicio de sesión correcto", "Acceso permitido", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else
-            {
-                MessageBox.Show("Credenciales incorrectas", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                var usuario = db.Usuarios.FirstOrDefault(u => u.Correo == correo && u.Contrasena == contrasena);
+
+                if (usuario == null)
+                {
+                    MessageBox.Show("Usuario o contraseña incorrectos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                MessageBox.Show($"Bienvenido {usuario.Nombre} ({usuario.IdRol})", "Acceso correcto", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
+
 
         private void BtnLogin_MouseEnter(object sender, EventArgs e)
         {
@@ -127,7 +140,7 @@ namespace UPC.SmartRetention.UI
                 {
                     textBox.Text = "";
                     textBox.ForeColor = Color.White;
-                    if (textBox == txtContrasena)
+                    if (textBox == txtContraseña)
                         textBox.UseSystemPasswordChar = true;
                 }
             };
@@ -138,7 +151,7 @@ namespace UPC.SmartRetention.UI
                 {
                     textBox.ForeColor = Color.Gray;
                     textBox.Text = placeholder;
-                    if (textBox == txtContrasena)
+                    if (textBox == txtContraseña)
                         textBox.UseSystemPasswordChar = false;
                 }
             };
@@ -156,5 +169,7 @@ namespace UPC.SmartRetention.UI
             ReleaseCapture();
             SendMessage(this.Handle, 0x112, 0xf012, 0);
         }
+
+        
     }
 }

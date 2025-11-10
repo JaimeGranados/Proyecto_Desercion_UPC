@@ -15,13 +15,25 @@ namespace UPC.SmartRetention.UI
         public FormAdminPanel()
         {
             InitializeComponent();
-            this.Text = "Panel de Administración";
-        }
 
-        private void FormAdminPanel_Load(object sender, EventArgs e)
-        {
-            // Aquí podrías abrir un dashboard o el FormEstudiantes
+            // Fondo general oscuro
+            this.BackColor = Color.FromArgb(25, 25, 25);
+            this.DoubleBuffered = true; // Evita parpadeos visuales
+
+            // Imagen de fondo (puedes quitarla si prefieres solo color)
+            this.BackgroundImage = Properties.Resources.album_joji;
+            this.BackgroundImageLayout = ImageLayout.Stretch;
+
+            // Si tienes paneles en el diseñador, aplica sus colores
+            if (this.Controls.ContainsKey("panelMenu"))
+            {
+                this.Controls["panelMenu"].BackColor = Color.FromArgb(25, 25, 25);
+            }
+
+            if (this.Controls.ContainsKey("panelContenido"))
+            {
+                this.Controls["panelContenido"].BackColor = Color.FromArgb(40, 40, 40);
+            }
         }
     }
-
 }

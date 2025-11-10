@@ -15,7 +15,12 @@ namespace UPC.SmartRetention.UI
         public FormProfesorPanel()
         {
             InitializeComponent();
-            this.Text = "Panel del Profesor";
+
+            // Estilo base (igual que el FormLogin)
+            this.BackColor = System.Drawing.Color.FromArgb(30, 30, 30);
+            this.BackgroundImage = Properties.Resources.album_joji;
+            this.BackgroundImageLayout = ImageLayout.Stretch;
+            this.DoubleBuffered = true;
         }
     }
 
