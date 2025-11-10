@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="../UPC.SmartRetention.BLL/UPC.SmartRetention.BLL.csproj" Id="054b9ad7-f529-4a75-a29f-b10b890b69dc" />
+  <Project Path="../UPC.SmartRetention.DAL/UPC.SmartRetention.DAL.csproj" Id="9ba4eeab-0645-43f5-b408-cad539d879cb" />
+  <Project Path="../UPC.SmartRetention.Models/UPC.SmartRetention.Models.csproj" Id="6ffa4482-ce53-47b5-9c1b-9d208bf061a2" />
+  <Project Path="UPC.SmartRetention.UI.csproj" Id="1b164ba8-4cd8-4614-a049-a7017ccb42f2" />
+</Solution>
