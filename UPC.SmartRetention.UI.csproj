@@ -101,11 +101,23 @@
     <Compile Include="FormLogin.Designer.cs">
       <DependentUpon>FormLogin.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormNotificacion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormNotificacion.Designer.cs">
+      <DependentUpon>FormNotificacion.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormProfesorPanel.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormProfesorPanel.Designer.cs">
       <DependentUpon>FormProfesorPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormUsuarioDetalle.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormUsuarioDetalle.Designer.cs">
+      <DependentUpon>FormUsuarioDetalle.cs</DependentUpon>
     </Compile>
     <Compile Include="ProyectoVisualModel.Context.cs">
       <AutoGen>True</AutoGen>
@@ -138,6 +150,12 @@
     </Compile>
     <Compile Include="sysdiagrams.cs">
       <DependentUpon>ProyectoVisualModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UCUsuarios.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UCUsuarios.Designer.cs">
+      <DependentUpon>UCUsuarios.cs</DependentUpon>
     </Compile>
     <Compile Include="Usuarios.cs">
       <DependentUpon>ProyectoVisualModel.tt</DependentUpon>
