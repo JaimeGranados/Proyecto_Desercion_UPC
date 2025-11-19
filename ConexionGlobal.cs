@@ -1,5 +1,5 @@
 ﻿using System;
-using UPC.SmartRetention.UI; // usa tu namespace (ajústalo si es diferente)
+using UPC.SmartRetention.UI;
 
 public static class ConexionGlobal
 {
@@ -14,4 +14,7 @@ public static class ConexionGlobal
             return _context;
         }
     }
+
+    // Usuario logueado actualmente
+    public static Usuarios UsuarioActual { get; set; }
 }

@@ -119,7 +119,7 @@ namespace UPC.SmartRetention.UI
             // TimerFade
             // 
             this.TimerFade.Interval = 30;
-            this.TimerFade.Tick += new System.EventHandler(this.TimerFade_Tick);
+            //this.TimerFade.Tick += new System.EventHandler(this.TimerFade_Tick);
             // 
             // FormLogin
             // 

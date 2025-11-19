@@ -61,6 +61,8 @@
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Windows.Forms.DataVisualization.Design" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -72,16 +74,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Asistencias.cs">
+      <DependentUpon>ProyectoVisualModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Comentarios.cs">
       <DependentUpon>ProyectoVisualModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ConexionBD.cs" />
     <Compile Include="ConexionGlobal.cs" />
+    <Compile Include="Cursos.cs">
+      <DependentUpon>ProyectoVisualModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Encuestas.cs">
+      <DependentUpon>ProyectoVisualModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="FormAdminPanel.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormAdminPanel.Designer.cs">
       <DependentUpon>FormAdminPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormEncuestaDetalle.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormEncuestaDetalle.Designer.cs">
+      <DependentUpon>FormEncuestaDetalle.cs</DependentUpon>
     </Compile>
     <Compile Include="FormEstudianteEditar.cs">
       <SubType>Form</SubType>
@@ -113,11 +130,32 @@
     <Compile Include="FormProfesorPanel.Designer.cs">
       <DependentUpon>FormProfesorPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormResponderEncuesta.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormResponderEncuesta.Designer.cs">
+      <DependentUpon>FormResponderEncuesta.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormUsuarioDetalle.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormUsuarioDetalle.Designer.cs">
       <DependentUpon>FormUsuarioDetalle.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Matriculas.cs">
+      <DependentUpon>ProyectoVisualModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Notas.cs">
+      <DependentUpon>ProyectoVisualModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Opciones.cs">
+      <DependentUpon>ProyectoVisualModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Preguntas.cs">
+      <DependentUpon>ProyectoVisualModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProfesoresCursos.cs">
+      <DependentUpon>ProyectoVisualModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ProyectoVisualModel.Context.cs">
       <AutoGen>True</AutoGen>
@@ -139,6 +177,9 @@
     <Compile Include="Publicaciones.cs">
       <DependentUpon>ProyectoVisualModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Respuestas.cs">
+      <DependentUpon>ProyectoVisualModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Roles.cs">
       <DependentUpon>ProyectoVisualModel.tt</DependentUpon>
     </Compile>
@@ -151,6 +192,54 @@
     <Compile Include="sysdiagrams.cs">
       <DependentUpon>ProyectoVisualModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="UCConfigProfesor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UCConfigProfesor.Designer.cs">
+      <DependentUpon>UCConfigProfesor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UCEncuestas.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UCEncuestas.Designer.cs">
+      <DependentUpon>UCEncuestas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UCEncuestasProfesor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UCEncuestasProfesor.Designer.cs">
+      <DependentUpon>UCEncuestasProfesor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UCEstadisticas.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UCEstadisticas.Designer.cs">
+      <DependentUpon>UCEstadisticas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UCEstudiantesProfesor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UCEstudiantesProfesor.Designer.cs">
+      <DependentUpon>UCEstudiantesProfesor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UCInicioProfesor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UCInicioProfesor.Designer.cs">
+      <DependentUpon>UCInicioProfesor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UCMisEncuestas.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UCMisEncuestas.Designer.cs">
+      <DependentUpon>UCMisEncuestas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UCRendimientoProfesor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UCRendimientoProfesor.Designer.cs">
+      <DependentUpon>UCRendimientoProfesor.cs</DependentUpon>
+    </Compile>
     <Compile Include="UCUsuarios.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -158,6 +247,9 @@
       <DependentUpon>UCUsuarios.cs</DependentUpon>
     </Compile>
     <Compile Include="Usuarios.cs">
+      <DependentUpon>ProyectoVisualModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vw_EstudiantesRiesgo.cs">
       <DependentUpon>ProyectoVisualModel.tt</DependentUpon>
     </Compile>
     <EmbeddedResource Include="FormAdminPanel.resx">

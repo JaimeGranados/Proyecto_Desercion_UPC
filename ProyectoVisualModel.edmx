@@ -5,6 +5,15 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="ProyectoVisualModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Asistencias">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdMatricula" Type="int" Nullable="false" />
+          <Property Name="Fecha" Type="date" Nullable="false" />
+          <Property Name="Asistio" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="Comentarios">
           <Key>
             <PropertyRef Name="Id" />
@@ -15,6 +24,71 @@
           <Property Name="Contenido" Type="nvarchar(max)" Nullable="false" />
           <Property Name="FechaComentario" Type="datetime" />
         </EntityType>
+        <EntityType Name="Cursos">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Codigo" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Creditos" Type="int" Nullable="false" />
+          <Property Name="IdProfesor" Type="int" Nullable="false" />
+          <Property Name="Activo" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Encuestas">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Titulo" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Descripcion" Type="nvarchar" MaxLength="500" />
+          <Property Name="FechaCreacion" Type="datetime" />
+          <Property Name="Activo" Type="bit" />
+          <Property Name="IdCurso" Type="int" />
+        </EntityType>
+        <EntityType Name="Matriculas">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdEstudiante" Type="int" Nullable="false" />
+          <Property Name="IdCurso" Type="int" Nullable="false" />
+          <Property Name="FechaMatricula" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Notas">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdMatricula" Type="int" Nullable="false" />
+          <Property Name="Nota" Type="decimal" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="FechaRegistro" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Opciones">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdPregunta" Type="int" Nullable="false" />
+          <Property Name="TextoOpcion" Type="nvarchar" MaxLength="200" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Preguntas">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdEncuesta" Type="int" Nullable="false" />
+          <Property Name="Texto" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="Tipo" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ProfesoresCursos">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdProfesor" Type="int" Nullable="false" />
+          <Property Name="IdCurso" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Publicaciones">
           <Key>
             <PropertyRef Name="Id" />
@@ -24,6 +98,16 @@
           <Property Name="Titulo" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="Contenido" Type="nvarchar(max)" Nullable="false" />
           <Property Name="FechaPublicacion" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Respuestas">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdPregunta" Type="int" Nullable="false" />
+          <Property Name="IdUsuario" Type="int" />
+          <Property Name="RespuestaTexto" Type="nvarchar" MaxLength="500" />
+          <Property Name="FechaRespuesta" Type="datetime" />
         </EntityType>
         <EntityType Name="Roles">
           <Key>
@@ -56,6 +140,78 @@
           <Property Name="IdRol" Type="int" Nullable="false" />
           <Property Name="Estado" Type="bit" />
         </EntityType>
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'ProyectoVisual.dbo.vw_EstudiantesRiesgo' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+        <EntityType Name="vw_EstudiantesRiesgo">
+          <Key>
+            <PropertyRef Name="IdEstudiante" />
+            <PropertyRef Name="Estudiante" />
+            <PropertyRef Name="Curso" />
+            <PropertyRef Name="IdMatricula" />
+            <PropertyRef Name="NivelRiesgo" />
+          </Key>
+          <Property Name="IdEstudiante" Type="int" Nullable="false" />
+          <Property Name="Estudiante" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Curso" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="IdMatricula" Type="int" Nullable="false" />
+          <Property Name="PorcentajeAsistencia" Type="float" />
+          <Property Name="UltimaNota" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="NivelRiesgo" Type="varchar" MaxLength="4" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Opciones__IdPreg__09A971A2">
+          <End Role="Preguntas" Type="Self.Preguntas" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Opciones" Type="Self.Opciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Preguntas">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Opciones">
+              <PropertyRef Name="IdPregunta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Preguntas__IdEnc__06CD04F7">
+          <End Role="Encuestas" Type="Self.Encuestas" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Preguntas" Type="Self.Preguntas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Encuestas">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Preguntas">
+              <PropertyRef Name="IdEncuesta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Respuesta__IdPre__0C85DE4D">
+          <End Role="Preguntas" Type="Self.Preguntas" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Respuestas" Type="Self.Respuestas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Preguntas">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Respuestas">
+              <PropertyRef Name="IdPregunta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Asistencias_Matriculas">
+          <End Role="Matriculas" Type="Self.Matriculas" Multiplicity="1" />
+          <End Role="Asistencias" Type="Self.Asistencias" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Matriculas">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Asistencias">
+              <PropertyRef Name="IdMatricula" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Comentarios_Publicaciones">
           <End Role="Publicaciones" Type="Self.Publicaciones" Multiplicity="1" />
           <End Role="Comentarios" Type="Self.Comentarios" Multiplicity="*" />
@@ -77,6 +233,66 @@
             </Principal>
             <Dependent Role="Comentarios">
               <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cursos_Usuarios">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="Cursos" Type="Self.Cursos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Cursos">
+              <PropertyRef Name="IdProfesor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Encuestas_Cursos">
+          <End Role="Cursos" Type="Self.Cursos" Multiplicity="0..1" />
+          <End Role="Encuestas" Type="Self.Encuestas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cursos">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Encuestas">
+              <PropertyRef Name="IdCurso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Matriculas_Cursos">
+          <End Role="Cursos" Type="Self.Cursos" Multiplicity="1" />
+          <End Role="Matriculas" Type="Self.Matriculas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cursos">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Matriculas">
+              <PropertyRef Name="IdCurso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Matriculas_Usuarios">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="Matriculas" Type="Self.Matriculas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Matriculas">
+              <PropertyRef Name="IdEstudiante" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Notas_Matriculas">
+          <End Role="Matriculas" Type="Self.Matriculas" Multiplicity="1" />
+          <End Role="Notas" Type="Self.Notas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Matriculas">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Notas">
+              <PropertyRef Name="IdMatricula" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -136,11 +352,47 @@
         </Function>
         <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="ProyectoVisualModelStoreContainer">
+          <EntitySet Name="Asistencias" EntityType="Self.Asistencias" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Comentarios" EntityType="Self.Comentarios" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cursos" EntityType="Self.Cursos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Encuestas" EntityType="Self.Encuestas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Matriculas" EntityType="Self.Matriculas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Notas" EntityType="Self.Notas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Opciones" EntityType="Self.Opciones" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Preguntas" EntityType="Self.Preguntas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProfesoresCursos" EntityType="Self.ProfesoresCursos" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Publicaciones" EntityType="Self.Publicaciones" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Respuestas" EntityType="Self.Respuestas" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Usuarios" EntityType="Self.Usuarios" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="vw_EstudiantesRiesgo" EntityType="Self.vw_EstudiantesRiesgo" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vw_EstudiantesRiesgo].[IdEstudiante] AS [IdEstudiante], 
+    [vw_EstudiantesRiesgo].[Estudiante] AS [Estudiante], 
+    [vw_EstudiantesRiesgo].[Curso] AS [Curso], 
+    [vw_EstudiantesRiesgo].[IdMatricula] AS [IdMatricula], 
+    [vw_EstudiantesRiesgo].[PorcentajeAsistencia] AS [PorcentajeAsistencia], 
+    [vw_EstudiantesRiesgo].[UltimaNota] AS [UltimaNota], 
+    [vw_EstudiantesRiesgo].[NivelRiesgo] AS [NivelRiesgo]
+    FROM [dbo].[vw_EstudiantesRiesgo] AS [vw_EstudiantesRiesgo]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK__Opciones__IdPreg__09A971A2" Association="Self.FK__Opciones__IdPreg__09A971A2">
+            <End Role="Preguntas" EntitySet="Preguntas" />
+            <End Role="Opciones" EntitySet="Opciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Preguntas__IdEnc__06CD04F7" Association="Self.FK__Preguntas__IdEnc__06CD04F7">
+            <End Role="Encuestas" EntitySet="Encuestas" />
+            <End Role="Preguntas" EntitySet="Preguntas" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Respuesta__IdPre__0C85DE4D" Association="Self.FK__Respuesta__IdPre__0C85DE4D">
+            <End Role="Preguntas" EntitySet="Preguntas" />
+            <End Role="Respuestas" EntitySet="Respuestas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Asistencias_Matriculas" Association="Self.FK_Asistencias_Matriculas">
+            <End Role="Matriculas" EntitySet="Matriculas" />
+            <End Role="Asistencias" EntitySet="Asistencias" />
+          </AssociationSet>
           <AssociationSet Name="FK_Comentarios_Publicaciones" Association="Self.FK_Comentarios_Publicaciones">
             <End Role="Publicaciones" EntitySet="Publicaciones" />
             <End Role="Comentarios" EntitySet="Comentarios" />
@@ -148,6 +400,26 @@
           <AssociationSet Name="FK_Comentarios_Usuarios" Association="Self.FK_Comentarios_Usuarios">
             <End Role="Usuarios" EntitySet="Usuarios" />
             <End Role="Comentarios" EntitySet="Comentarios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cursos_Usuarios" Association="Self.FK_Cursos_Usuarios">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Cursos" EntitySet="Cursos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Encuestas_Cursos" Association="Self.FK_Encuestas_Cursos">
+            <End Role="Cursos" EntitySet="Cursos" />
+            <End Role="Encuestas" EntitySet="Encuestas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Matriculas_Cursos" Association="Self.FK_Matriculas_Cursos">
+            <End Role="Cursos" EntitySet="Cursos" />
+            <End Role="Matriculas" EntitySet="Matriculas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Matriculas_Usuarios" Association="Self.FK_Matriculas_Usuarios">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Matriculas" EntitySet="Matriculas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Notas_Matriculas" Association="Self.FK_Notas_Matriculas">
+            <End Role="Matriculas" EntitySet="Matriculas" />
+            <End Role="Notas" EntitySet="Notas" />
           </AssociationSet>
           <AssociationSet Name="FK_Publicaciones_Usuarios" Association="Self.FK_Publicaciones_Usuarios">
             <End Role="Usuarios" EntitySet="Usuarios" />
@@ -220,6 +492,8 @@
           <NavigationProperty Name="Comentarios" Relationship="Self.FK_Comentarios_Usuarios" FromRole="Usuarios" ToRole="Comentarios" />
           <NavigationProperty Name="Publicaciones" Relationship="Self.FK_Publicaciones_Usuarios" FromRole="Usuarios" ToRole="Publicaciones" />
           <NavigationProperty Name="Roles" Relationship="Self.FK_Usuarios_Roles" FromRole="Usuarios" ToRole="Roles" />
+          <NavigationProperty Name="Cursos" Relationship="ProyectoVisualModel.FK_Cursos_Usuarios" FromRole="Usuarios" ToRole="Cursos" />
+          <NavigationProperty Name="Matriculas" Relationship="ProyectoVisualModel.FK_Matriculas_Usuarios" FromRole="Usuarios" ToRole="Matriculas" />
         </EntityType>
         <Association Name="FK_Comentarios_Publicaciones">
           <End Role="Publicaciones" Type="Self.Publicaciones" Multiplicity="1" />
@@ -321,6 +595,52 @@
             <Parameter Name="new_diagramname" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
+          <EntitySet Name="Asistencias" EntityType="ProyectoVisualModel.Asistencias" />
+          <EntitySet Name="Cursos" EntityType="ProyectoVisualModel.Cursos" />
+          <EntitySet Name="Encuestas" EntityType="ProyectoVisualModel.Encuestas" />
+          <EntitySet Name="Matriculas" EntityType="ProyectoVisualModel.Matriculas" />
+          <EntitySet Name="Notas" EntityType="ProyectoVisualModel.Notas" />
+          <EntitySet Name="Opciones" EntityType="ProyectoVisualModel.Opciones" />
+          <EntitySet Name="Preguntas" EntityType="ProyectoVisualModel.Preguntas" />
+          <EntitySet Name="ProfesoresCursos" EntityType="ProyectoVisualModel.ProfesoresCursos" />
+          <EntitySet Name="Respuestas" EntityType="ProyectoVisualModel.Respuestas" />
+          <AssociationSet Name="FK_Asistencias_Matriculas" Association="ProyectoVisualModel.FK_Asistencias_Matriculas">
+            <End Role="Matriculas" EntitySet="Matriculas" />
+            <End Role="Asistencias" EntitySet="Asistencias" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cursos_Usuarios" Association="ProyectoVisualModel.FK_Cursos_Usuarios">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Cursos" EntitySet="Cursos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Matriculas_Cursos" Association="ProyectoVisualModel.FK_Matriculas_Cursos">
+            <End Role="Cursos" EntitySet="Cursos" />
+            <End Role="Matriculas" EntitySet="Matriculas" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Preguntas__IdEnc__06CD04F7" Association="ProyectoVisualModel.FK__Preguntas__IdEnc__06CD04F7">
+            <End Role="Encuestas" EntitySet="Encuestas" />
+            <End Role="Preguntas" EntitySet="Preguntas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Matriculas_Usuarios" Association="ProyectoVisualModel.FK_Matriculas_Usuarios">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Matriculas" EntitySet="Matriculas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Notas_Matriculas" Association="ProyectoVisualModel.FK_Notas_Matriculas">
+            <End Role="Matriculas" EntitySet="Matriculas" />
+            <End Role="Notas" EntitySet="Notas" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Opciones__IdPreg__09A971A2" Association="ProyectoVisualModel.FK__Opciones__IdPreg__09A971A2">
+            <End Role="Preguntas" EntitySet="Preguntas" />
+            <End Role="Opciones" EntitySet="Opciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Respuesta__IdPre__0C85DE4D" Association="ProyectoVisualModel.FK__Respuesta__IdPre__0C85DE4D">
+            <End Role="Preguntas" EntitySet="Preguntas" />
+            <End Role="Respuestas" EntitySet="Respuestas" />
+          </AssociationSet>
+          <EntitySet Name="vw_EstudiantesRiesgo" EntityType="ProyectoVisualModel.vw_EstudiantesRiesgo" />
+          <AssociationSet Name="FK_Encuestas_Cursos" Association="ProyectoVisualModel.FK_Encuestas_Cursos">
+            <End Role="Cursos" EntitySet="Cursos" />
+            <End Role="Encuestas" EntitySet="Encuestas" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -333,6 +653,236 @@
           <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
           <Property Type="Int32" Name="OwnerID" Nullable="false" />
         </ComplexType>
+        <EntityType Name="Asistencias">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdMatricula" Type="Int32" Nullable="false" />
+          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Asistio" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Matriculas" Relationship="ProyectoVisualModel.FK_Asistencias_Matriculas" FromRole="Asistencias" ToRole="Matriculas" />
+        </EntityType>
+        <EntityType Name="Cursos">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Codigo" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Creditos" Type="Int32" Nullable="false" />
+          <Property Name="IdProfesor" Type="Int32" Nullable="false" />
+          <Property Name="Activo" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Usuarios" Relationship="ProyectoVisualModel.FK_Cursos_Usuarios" FromRole="Cursos" ToRole="Usuarios" />
+          <NavigationProperty Name="Matriculas" Relationship="ProyectoVisualModel.FK_Matriculas_Cursos" FromRole="Cursos" ToRole="Matriculas" />
+          <NavigationProperty Name="Encuestas" Relationship="ProyectoVisualModel.FK_Encuestas_Cursos" FromRole="Cursos" ToRole="Encuestas" />
+        </EntityType>
+        <EntityType Name="Encuestas">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Titulo" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Descripcion" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="FechaCreacion" Type="DateTime" Precision="3" />
+          <Property Name="Activo" Type="Boolean" />
+          <NavigationProperty Name="Preguntas" Relationship="ProyectoVisualModel.FK__Preguntas__IdEnc__06CD04F7" FromRole="Encuestas" ToRole="Preguntas" />
+          <Property Name="IdCurso" Type="Int32" />
+          <NavigationProperty Name="Cursos" Relationship="ProyectoVisualModel.FK_Encuestas_Cursos" FromRole="Encuestas" ToRole="Cursos" />
+        </EntityType>
+        <EntityType Name="Matriculas">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdEstudiante" Type="Int32" Nullable="false" />
+          <Property Name="IdCurso" Type="Int32" Nullable="false" />
+          <Property Name="FechaMatricula" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Asistencias" Relationship="ProyectoVisualModel.FK_Asistencias_Matriculas" FromRole="Matriculas" ToRole="Asistencias" />
+          <NavigationProperty Name="Cursos" Relationship="ProyectoVisualModel.FK_Matriculas_Cursos" FromRole="Matriculas" ToRole="Cursos" />
+          <NavigationProperty Name="Usuarios" Relationship="ProyectoVisualModel.FK_Matriculas_Usuarios" FromRole="Matriculas" ToRole="Usuarios" />
+          <NavigationProperty Name="Notas" Relationship="ProyectoVisualModel.FK_Notas_Matriculas" FromRole="Matriculas" ToRole="Notas" />
+        </EntityType>
+        <EntityType Name="Notas">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdMatricula" Type="Int32" Nullable="false" />
+          <Property Name="Nota" Type="Decimal" Nullable="false" Precision="5" Scale="2" />
+          <Property Name="FechaRegistro" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Matriculas" Relationship="ProyectoVisualModel.FK_Notas_Matriculas" FromRole="Notas" ToRole="Matriculas" />
+        </EntityType>
+        <EntityType Name="Opciones">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdPregunta" Type="Int32" Nullable="false" />
+          <Property Name="TextoOpcion" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Preguntas" Relationship="ProyectoVisualModel.FK__Opciones__IdPreg__09A971A2" FromRole="Opciones" ToRole="Preguntas" />
+        </EntityType>
+        <EntityType Name="Preguntas">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdEncuesta" Type="Int32" Nullable="false" />
+          <Property Name="Texto" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="Tipo" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Encuestas" Relationship="ProyectoVisualModel.FK__Preguntas__IdEnc__06CD04F7" FromRole="Preguntas" ToRole="Encuestas" />
+          <NavigationProperty Name="Opciones" Relationship="ProyectoVisualModel.FK__Opciones__IdPreg__09A971A2" FromRole="Preguntas" ToRole="Opciones" />
+          <NavigationProperty Name="Respuestas" Relationship="ProyectoVisualModel.FK__Respuesta__IdPre__0C85DE4D" FromRole="Preguntas" ToRole="Respuestas" />
+        </EntityType>
+        <EntityType Name="ProfesoresCursos">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdProfesor" Type="Int32" Nullable="false" />
+          <Property Name="IdCurso" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Respuestas">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdPregunta" Type="Int32" Nullable="false" />
+          <Property Name="IdUsuario" Type="Int32" />
+          <Property Name="RespuestaTexto" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="FechaRespuesta" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Preguntas" Relationship="ProyectoVisualModel.FK__Respuesta__IdPre__0C85DE4D" FromRole="Respuestas" ToRole="Preguntas" />
+        </EntityType>
+        <Association Name="FK_Asistencias_Matriculas">
+          <End Type="ProyectoVisualModel.Matriculas" Role="Matriculas" Multiplicity="1" />
+          <End Type="ProyectoVisualModel.Asistencias" Role="Asistencias" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Matriculas">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Asistencias">
+              <PropertyRef Name="IdMatricula" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cursos_Usuarios">
+          <End Type="ProyectoVisualModel.Usuarios" Role="Usuarios" Multiplicity="1" />
+          <End Type="ProyectoVisualModel.Cursos" Role="Cursos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Cursos">
+              <PropertyRef Name="IdProfesor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Matriculas_Cursos">
+          <End Type="ProyectoVisualModel.Cursos" Role="Cursos" Multiplicity="1" />
+          <End Type="ProyectoVisualModel.Matriculas" Role="Matriculas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cursos">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Matriculas">
+              <PropertyRef Name="IdCurso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Preguntas__IdEnc__06CD04F7">
+          <End Type="ProyectoVisualModel.Encuestas" Role="Encuestas" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="ProyectoVisualModel.Preguntas" Role="Preguntas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Encuestas">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Preguntas">
+              <PropertyRef Name="IdEncuesta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Matriculas_Usuarios">
+          <End Type="ProyectoVisualModel.Usuarios" Role="Usuarios" Multiplicity="1" />
+          <End Type="ProyectoVisualModel.Matriculas" Role="Matriculas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Matriculas">
+              <PropertyRef Name="IdEstudiante" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Notas_Matriculas">
+          <End Type="ProyectoVisualModel.Matriculas" Role="Matriculas" Multiplicity="1" />
+          <End Type="ProyectoVisualModel.Notas" Role="Notas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Matriculas">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Notas">
+              <PropertyRef Name="IdMatricula" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Opciones__IdPreg__09A971A2">
+          <End Type="ProyectoVisualModel.Preguntas" Role="Preguntas" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="ProyectoVisualModel.Opciones" Role="Opciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Preguntas">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Opciones">
+              <PropertyRef Name="IdPregunta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Respuesta__IdPre__0C85DE4D">
+          <End Type="ProyectoVisualModel.Preguntas" Role="Preguntas" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="ProyectoVisualModel.Respuestas" Role="Respuestas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Preguntas">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Respuestas">
+              <PropertyRef Name="IdPregunta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="vw_EstudiantesRiesgo">
+          <Key>
+            <PropertyRef Name="IdEstudiante" />
+            <PropertyRef Name="Estudiante" />
+            <PropertyRef Name="Curso" />
+            <PropertyRef Name="IdMatricula" />
+            <PropertyRef Name="NivelRiesgo" />
+          </Key>
+          <Property Name="IdEstudiante" Type="Int32" Nullable="false" />
+          <Property Name="Estudiante" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Curso" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="IdMatricula" Type="Int32" Nullable="false" />
+          <Property Name="PorcentajeAsistencia" Type="Double" />
+          <Property Name="UltimaNota" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="NivelRiesgo" Type="String" Nullable="false" MaxLength="4" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="FK_Encuestas_Cursos">
+          <End Type="ProyectoVisualModel.Cursos" Role="Cursos" Multiplicity="0..1" />
+          <End Type="ProyectoVisualModel.Encuestas" Role="Encuestas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cursos">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Encuestas">
+              <PropertyRef Name="IdCurso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -419,6 +969,112 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="ProyectoVisualModel.Store.sp_renamediagram" />
           <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="ProyectoVisualModel.Store.sp_upgraddiagrams" />
+          <EntitySetMapping Name="Asistencias">
+            <EntityTypeMapping TypeName="ProyectoVisualModel.Asistencias">
+              <MappingFragment StoreEntitySet="Asistencias">
+                <ScalarProperty Name="Asistio" ColumnName="Asistio" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="IdMatricula" ColumnName="IdMatricula" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cursos">
+            <EntityTypeMapping TypeName="ProyectoVisualModel.Cursos">
+              <MappingFragment StoreEntitySet="Cursos">
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="IdProfesor" ColumnName="IdProfesor" />
+                <ScalarProperty Name="Creditos" ColumnName="Creditos" />
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Encuestas">
+            <EntityTypeMapping TypeName="ProyectoVisualModel.Encuestas">
+              <MappingFragment StoreEntitySet="Encuestas">
+                <ScalarProperty Name="IdCurso" ColumnName="IdCurso" />
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Titulo" ColumnName="Titulo" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Matriculas">
+            <EntityTypeMapping TypeName="ProyectoVisualModel.Matriculas">
+              <MappingFragment StoreEntitySet="Matriculas">
+                <ScalarProperty Name="FechaMatricula" ColumnName="FechaMatricula" />
+                <ScalarProperty Name="IdCurso" ColumnName="IdCurso" />
+                <ScalarProperty Name="IdEstudiante" ColumnName="IdEstudiante" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Notas">
+            <EntityTypeMapping TypeName="ProyectoVisualModel.Notas">
+              <MappingFragment StoreEntitySet="Notas">
+                <ScalarProperty Name="FechaRegistro" ColumnName="FechaRegistro" />
+                <ScalarProperty Name="Nota" ColumnName="Nota" />
+                <ScalarProperty Name="IdMatricula" ColumnName="IdMatricula" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Opciones">
+            <EntityTypeMapping TypeName="ProyectoVisualModel.Opciones">
+              <MappingFragment StoreEntitySet="Opciones">
+                <ScalarProperty Name="TextoOpcion" ColumnName="TextoOpcion" />
+                <ScalarProperty Name="IdPregunta" ColumnName="IdPregunta" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Preguntas">
+            <EntityTypeMapping TypeName="ProyectoVisualModel.Preguntas">
+              <MappingFragment StoreEntitySet="Preguntas">
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+                <ScalarProperty Name="Texto" ColumnName="Texto" />
+                <ScalarProperty Name="IdEncuesta" ColumnName="IdEncuesta" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProfesoresCursos">
+            <EntityTypeMapping TypeName="ProyectoVisualModel.ProfesoresCursos">
+              <MappingFragment StoreEntitySet="ProfesoresCursos">
+                <ScalarProperty Name="IdCurso" ColumnName="IdCurso" />
+                <ScalarProperty Name="IdProfesor" ColumnName="IdProfesor" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Respuestas">
+            <EntityTypeMapping TypeName="ProyectoVisualModel.Respuestas">
+              <MappingFragment StoreEntitySet="Respuestas">
+                <ScalarProperty Name="FechaRespuesta" ColumnName="FechaRespuesta" />
+                <ScalarProperty Name="RespuestaTexto" ColumnName="RespuestaTexto" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="IdPregunta" ColumnName="IdPregunta" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vw_EstudiantesRiesgo">
+            <EntityTypeMapping TypeName="ProyectoVisualModel.vw_EstudiantesRiesgo">
+              <MappingFragment StoreEntitySet="vw_EstudiantesRiesgo">
+                <ScalarProperty Name="NivelRiesgo" ColumnName="NivelRiesgo" />
+                <ScalarProperty Name="UltimaNota" ColumnName="UltimaNota" />
+                <ScalarProperty Name="PorcentajeAsistencia" ColumnName="PorcentajeAsistencia" />
+                <ScalarProperty Name="IdMatricula" ColumnName="IdMatricula" />
+                <ScalarProperty Name="Curso" ColumnName="Curso" />
+                <ScalarProperty Name="Estudiante" ColumnName="Estudiante" />
+                <ScalarProperty Name="IdEstudiante" ColumnName="IdEstudiante" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

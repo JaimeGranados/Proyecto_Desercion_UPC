@@ -12,6 +12,7 @@ namespace UPC.SmartRetention.UI
         Panel panelCard;
         DataGridView dgvUsuarios;
         Button btnAgregar;
+        string connectionString = "Server=localhost;Database=Proyectovisual;User Id=sa;Password=NuevaContraseñaFuerte123!;";
 
         public UCUsuarios()
         {
@@ -20,149 +21,140 @@ namespace UPC.SmartRetention.UI
             this.DoubleBuffered = true;
         }
 
-        // ⚙️ Tu conexión local
-        string connectionString = "Server=localhost;Database=Proyectovisual;User Id=sa;Password=NuevaContraseñaFuerte123!;";
-
         private void CrearInterfaz()
         {
+            // Fondo general
             this.BackColor = Color.FromArgb(44, 47, 51);
             this.Dock = DockStyle.Fill;
 
-            panelCard = new Panel();
-            panelCard.BackColor = Color.FromArgb(54, 57, 63);
-            panelCard.Dock = DockStyle.Fill;
-            panelCard.Padding = new Padding(25, 70, 25, 25);
-            panelCard.DoubleBuffered(true);
+            // panelCard centrado con tamaño razonable
+            panelCard = new Panel
+            {
+                BackColor = Color.FromArgb(54, 57, 63),
+                Anchor = AnchorStyles.None,
+                Width = 1100,
+                Height = 600,
+                Padding = new Padding(20, 20, 20, 20)
+            };
             panelCard.Paint += DibujarTarjetaConSombra;
+            this.Controls.Add(panelCard);
 
-            // ➕ Botón agregar
-            btnAgregar = new Button();
-            btnAgregar.Text = "+ Agregar usuario";
-            btnAgregar.Font = new Font("Segoe UI", 11, FontStyle.Bold);
-            btnAgregar.ForeColor = Color.White;
-            btnAgregar.BackColor = Color.FromArgb(0, 120, 215);
-            btnAgregar.FlatStyle = FlatStyle.Flat;
+            // Mantener centrado cuando se cambia el tamaño del parent
+            this.Resize += (s, e) =>
+            {
+                panelCard.Left = Math.Max(0, (this.Width - panelCard.Width) / 2);
+                panelCard.Top = Math.Max(0, (this.Height - panelCard.Height) / 2);
+            };
+
+            // ====== HEADER SUPERIOR ======
+            Panel header = new Panel
+            {
+                Dock = DockStyle.Top,
+                Height = 60,
+                BackColor = Color.FromArgb(54, 57, 63),
+                Padding = new Padding(5, 10, 5, 10)
+            };
+            panelCard.Controls.Add(header);
+
+            // Botón Agregar
+            btnAgregar = new Button
+            {
+                Text = "+ Agregar usuario",
+                Font = new Font("Segoe UI", 11, FontStyle.Bold),
+                ForeColor = Color.White,
+                BackColor = Color.FromArgb(0, 120, 215),
+                FlatStyle = FlatStyle.Flat,
+                Size = new Size(160, 42),
+                Cursor = Cursors.Hand,
+                Dock = DockStyle.Left,
+                Margin = new Padding(10, 0, 10, 0)
+            };
             btnAgregar.FlatAppearance.BorderSize = 0;
-            btnAgregar.Size = new Size(160, 42);
-            btnAgregar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnAgregar.Location = new Point(panelCard.Width - btnAgregar.Width - 25, 15);
-            btnAgregar.Cursor = Cursors.Hand;
             btnAgregar.Click += BtnAgregar_Click;
             btnAgregar.MouseEnter += (s, e) => btnAgregar.BackColor = Color.FromArgb(0, 150, 255);
             btnAgregar.MouseLeave += (s, e) => btnAgregar.BackColor = Color.FromArgb(0, 120, 215);
+            header.Controls.Add(btnAgregar);
 
-            panelCard.Resize += (s, e) =>
+            // ====== Barra de búsqueda ======
+            TextBox txtBuscar = new TextBox
             {
-                btnAgregar.Location = new Point(panelCard.ClientSize.Width - btnAgregar.Width - 25, 15);
+                Font = new Font("Segoe UI", 11),
+                ForeColor = Color.LightGray,
+                BackColor = Color.FromArgb(48, 49, 54),
+                BorderStyle = BorderStyle.FixedSingle,
+                Width = 300,
+                Height = 36,
+                Text = "Buscar usuario...",
+                Dock = DockStyle.Right,
+                Margin = new Padding(10)
             };
 
-            // 📋 DataGridView
-            dgvUsuarios = new DataGridView();
-            dgvUsuarios.Dock = DockStyle.Fill;
-            dgvUsuarios.BackgroundColor = panelCard.BackColor;
-            dgvUsuarios.BorderStyle = BorderStyle.None;
-            dgvUsuarios.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgvUsuarios.ReadOnly = true;
-            dgvUsuarios.RowHeadersVisible = false;
-            dgvUsuarios.AllowUserToAddRows = false;
-            dgvUsuarios.AllowUserToDeleteRows = false;
-            dgvUsuarios.AllowUserToResizeRows = false;
-            dgvUsuarios.EnableHeadersVisualStyles = false;
-            dgvUsuarios.MultiSelect = false;
-            dgvUsuarios.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvUsuarios.Margin = new Padding(0, 10, 0, 0);
-            dgvUsuarios.StandardTab = true;
-
-            // 🖌 Encabezado
-            dgvUsuarios.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(70, 73, 78);
-            dgvUsuarios.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dgvUsuarios.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 11, FontStyle.Bold);
-            dgvUsuarios.ColumnHeadersHeight = 45;
-            dgvUsuarios.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-
-            // 🖌 Celdas
-            dgvUsuarios.DefaultCellStyle.BackColor = panelCard.BackColor;
-            dgvUsuarios.DefaultCellStyle.ForeColor = Color.WhiteSmoke;
-            dgvUsuarios.DefaultCellStyle.SelectionBackColor = Color.FromArgb(0, 120, 215);
-            dgvUsuarios.DefaultCellStyle.SelectionForeColor = Color.White;
-            dgvUsuarios.DefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
-            dgvUsuarios.RowTemplate.Height = 40;
-            dgvUsuarios.GridColor = Color.FromArgb(90, 90, 90);
-            dgvUsuarios.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(64, 67, 73);
-
-            dgvUsuarios.CellContentClick += dgvUsuarios_CellContentClick;
-
-            // 🚫 Evita la excepción y los saltos de color
-            dgvUsuarios.CellEnter += (s, e) =>
+            // Placeholder simulado
+            txtBuscar.GotFocus += (s, e) =>
             {
-                if (e.RowIndex >= 0)
+                if (txtBuscar.Text == "Buscar usuario...")
                 {
-                    dgvUsuarios.ClearSelection();
-                    dgvUsuarios.Rows[e.RowIndex].Selected = true;
+                    txtBuscar.Text = "";
+                    txtBuscar.ForeColor = Color.White;
                 }
             };
-
-            dgvUsuarios.SelectionChanged += (s, e) =>
+            txtBuscar.LostFocus += (s, e) =>
             {
-                if (dgvUsuarios.Focused && dgvUsuarios.SelectedCells.Count > 0)
+                if (string.IsNullOrWhiteSpace(txtBuscar.Text))
                 {
-                    dgvUsuarios.ClearSelection();
+                    txtBuscar.Text = "Buscar usuario...";
+                    txtBuscar.ForeColor = Color.LightGray;
                 }
             };
+            header.Controls.Add(txtBuscar);
 
-            // Agregar controles
-            panelCard.Controls.Add(btnAgregar);
+            // ====== DataGridView ======
+            dgvUsuarios = new DataGridView
+            {
+                Dock = DockStyle.Fill,
+                BackgroundColor = panelCard.BackColor,
+                BorderStyle = BorderStyle.None,
+                AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
+                ReadOnly = true,
+                RowHeadersVisible = false,
+                AllowUserToAddRows = false,
+                AllowUserToDeleteRows = false,
+                AllowUserToResizeRows = false,
+                EnableHeadersVisualStyles = false,
+                MultiSelect = false,
+                SelectionMode = DataGridViewSelectionMode.FullRowSelect,
+                Margin = new Padding(20, 20, 20, 20)
+            };
+
             panelCard.Controls.Add(dgvUsuarios);
-            this.Controls.Add(panelCard);
+            dgvUsuarios.BringToFront();
+
+            // Evento de filtrado en tiempo real
+            txtBuscar.TextChanged += (s, e) =>
+            {
+                if (txtBuscar.Text == "Buscar usuario...") return;
+
+                if (dgvUsuarios != null && dgvUsuarios.DataSource is DataTable dt)
+                {
+                    string filtro = txtBuscar.Text.Trim().Replace("'", "''");
+                    dt.DefaultView.RowFilter = string.IsNullOrEmpty(filtro)
+                        ? string.Empty
+                        : $"NombreCompleto LIKE '%{filtro}%' OR Correo LIKE '%{filtro}%' OR Rol LIKE '%{filtro}%'";
+                }
+            };
 
             // Cargar datos
             CargarUsuariosDesdeBD();
         }
 
-        private void DibujarTarjetaConSombra(object sender, PaintEventArgs e)
-        {
-            var panel = sender as Panel;
-            int radius = 14;
-            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-
-            using (GraphicsPath shadowPath = RoundedRect(new Rectangle(6, 6, panel.Width - 12, panel.Height - 12), radius))
-            using (PathGradientBrush pgb = new PathGradientBrush(shadowPath))
-            {
-                pgb.CenterColor = Color.FromArgb(100, 0, 0, 0);
-                pgb.SurroundColors = new[] { Color.FromArgb(0, 0, 0, 0) };
-                e.Graphics.FillPath(pgb, shadowPath);
-            }
-
-            using (GraphicsPath path = RoundedRect(new Rectangle(0, 0, panel.Width, panel.Height), radius))
-            {
-                using (SolidBrush background = new SolidBrush(panel.BackColor))
-                    e.Graphics.FillPath(background, path);
-
-                panel.Region = new Region(path);
-            }
-        }
-
-        private GraphicsPath RoundedRect(Rectangle r, int radius)
-        {
-            GraphicsPath path = new GraphicsPath();
-            int d = radius * 2;
-            path.AddArc(r.Left, r.Top, d, d, 180, 90);
-            path.AddArc(r.Right - d, r.Top, d, d, 270, 90);
-            path.AddArc(r.Right - d, r.Bottom - d, d, d, 0, 90);
-            path.AddArc(r.Left, r.Bottom - d, d, d, 90, 90);
-            path.CloseFigure();
-            return path;
-        }
 
         private void BtnAgregar_Click(object sender, EventArgs e)
         {
-            //MessageBox.Show("Agregar nuevo usuario (función en desarrollo)", "Usuarios");
             using (var form = new FormUsuarioDetalle())
             {
-                if (form.ShowDialog() == DialogResult.OK)
-                {
+                form.StartPosition = FormStartPosition.CenterParent;
+                if (form.ShowDialog(this) == DialogResult.OK)
                     CargarUsuariosDesdeBD();
-                }
             }
         }
 
@@ -187,44 +179,47 @@ namespace UPC.SmartRetention.UI
                     DataTable dt = new DataTable();
                     da.Fill(dt);
                     dgvUsuarios.DataSource = dt;
-
-                    // 🎨 Ajustes visuales
-                    dgvUsuarios.Columns["ID"].Width = 60;
-                    dgvUsuarios.Columns["NombreCompleto"].HeaderText = "Nombre completo";
-                    dgvUsuarios.Columns["Correo"].Width = 220;
-                    dgvUsuarios.Columns["Rol"].Width = 140;
-                    dgvUsuarios.Columns["Estado"].Width = 100;
-
-                    // 🧩 Añadir botones de acción si no existen
-                    if (!dgvUsuarios.Columns.Contains("Editar"))
-                    {
-                        DataGridViewButtonColumn btnEditar = new DataGridViewButtonColumn();
-                        btnEditar.HeaderText = "";
-                        btnEditar.Name = "Editar";
-                        btnEditar.Text = "✏️ Editar";
-                        btnEditar.UseColumnTextForButtonValue = true;
-                        btnEditar.FlatStyle = FlatStyle.Flat;
-                        btnEditar.DefaultCellStyle.BackColor = Color.FromArgb(40, 167, 69);
-                        btnEditar.DefaultCellStyle.ForeColor = Color.White;
-                        dgvUsuarios.Columns.Add(btnEditar);
-                    }
-
-                    if (!dgvUsuarios.Columns.Contains("Eliminar"))
-                    {
-                        DataGridViewButtonColumn btnEliminar = new DataGridViewButtonColumn();
-                        btnEliminar.HeaderText = "";
-                        btnEliminar.Name = "Eliminar";
-                        btnEliminar.Text = "🗑 Eliminar";
-                        btnEliminar.UseColumnTextForButtonValue = true;
-                        btnEliminar.FlatStyle = FlatStyle.Flat;
-                        btnEliminar.DefaultCellStyle.BackColor = Color.FromArgb(220, 53, 69);
-                        btnEliminar.DefaultCellStyle.ForeColor = Color.White;
-                        dgvUsuarios.Columns.Add(btnEliminar);
-                    }
-
-                    dgvUsuarios.ClearSelection();
-                    dgvUsuarios.CurrentCell = null;
                 }
+
+                // ✅ Evita duplicados de columnas personalizadas
+                if (!dgvUsuarios.Columns.Contains("Editar"))
+                {
+                    DataGridViewButtonColumn colEditar = new DataGridViewButtonColumn
+                    {
+                        Name = "Editar",
+                        HeaderText = "",
+                        Text = "Editar",
+                        UseColumnTextForButtonValue = true,
+                        FlatStyle = FlatStyle.Flat,
+                        Width = 90
+                    };
+                    dgvUsuarios.Columns.Add(colEditar);
+                }
+
+                if (!dgvUsuarios.Columns.Contains("Eliminar"))
+                {
+                    DataGridViewButtonColumn colEliminar = new DataGridViewButtonColumn
+                    {
+                        Name = "Eliminar",
+                        HeaderText = "",
+                        Text = "Eliminar",
+                        UseColumnTextForButtonValue = true,
+                        FlatStyle = FlatStyle.Flat,
+                        Width = 90
+                    };
+                    dgvUsuarios.Columns.Add(colEliminar);
+                }
+
+                // ✅ Forzar a que las columnas de botones sean editables
+                dgvUsuarios.Columns["Editar"].ReadOnly = false;
+                dgvUsuarios.Columns["Eliminar"].ReadOnly = false;
+
+                // ✅ Volver a vincular el evento (por si el DataGridView se regeneró)
+                dgvUsuarios.CellContentClick -= dgvUsuarios_CellContentClick;
+                dgvUsuarios.CellContentClick += dgvUsuarios_CellContentClick;
+
+                dgvUsuarios.ClearSelection();
+                dgvUsuarios.CurrentCell = null;
             }
             catch (Exception ex)
             {
@@ -233,20 +228,44 @@ namespace UPC.SmartRetention.UI
             }
         }
 
+
         private void dgvUsuarios_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
-
-            // Obtiene el ID del usuario
-            int idUsuario = Convert.ToInt32(dgvUsuarios.Rows[e.RowIndex].Cells["ID"].Value);
+            var idCell = dgvUsuarios.Rows[e.RowIndex].Cells["ID"];
+            if (idCell?.Value == null) return;
+            int idUsuario = Convert.ToInt32(idCell.Value);
 
             if (dgvUsuarios.Columns[e.ColumnIndex].Name == "Editar")
-            {
                 EditarUsuario(idUsuario);
-            }
             else if (dgvUsuarios.Columns[e.ColumnIndex].Name == "Eliminar")
-            {
                 EliminarUsuario(idUsuario);
+        }
+
+        private void dgvUsuarios_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+            var col = dgvUsuarios.Columns[e.ColumnIndex];
+            if (col == null) return;
+
+            if (col.Name == "Editar" || col.Name == "Eliminar")
+            {
+                e.PaintBackground(e.ClipBounds, true);
+                Rectangle rect = e.CellBounds;
+                rect.Inflate(-6, -8);
+
+                Color colorBoton = col.Name == "Editar"
+                    ? Color.FromArgb(0, 120, 215)
+                    : Color.FromArgb(200, 50, 50);
+
+                using (SolidBrush brush = new SolidBrush(colorBoton))
+                    e.Graphics.FillRoundedRectangle(brush, rect, 6);
+
+                string texto = col.Name == "Editar" ? "Editar" : "Eliminar";
+                TextRenderer.DrawText(e.Graphics, texto, new Font("Segoe UI", 9, FontStyle.Bold),
+                    rect, Color.White, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+
+                e.Handled = true;
             }
         }
 
@@ -255,39 +274,29 @@ namespace UPC.SmartRetention.UI
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlCommand cmd = new SqlCommand("SELECT * FROM Usuarios WHERE Id = @Id", conn))
                 {
-                    conn.Open();
-                    string query = "SELECT * FROM Usuarios WHERE Id = @Id";
-                    SqlCommand cmd = new SqlCommand(query, conn);
                     cmd.Parameters.AddWithValue("@Id", idUsuario);
+                    conn.Open();
 
-                    SqlDataReader reader = cmd.ExecuteReader();
-                    if (reader.Read())
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        // ✅ Crear el formulario y pasar el ID correctamente
-                        var form = new FormUsuarioDetalle
-                        {
-                            Text = "Editar usuario",
-                            UsuarioId = idUsuario // << ESTA LÍNEA ES CLAVE
-                        };
+                        if (!reader.Read()) return;
 
-                        // ✅ Cargar los datos en los controles
-                        form.Controls["txtNombre"].Text = reader["Nombre"].ToString();
-                        form.Controls["txtApellido"].Text = reader["Apellido"].ToString();
-                        form.Controls["txtCorreo"].Text = reader["Correo"].ToString();
-                        form.Controls["txtContrasena"].Text = reader["Contrasena"].ToString();
-
+                        string nombre = reader["Nombre"].ToString();
+                        string apellido = reader["Apellido"].ToString();
+                        string correo = reader["Correo"].ToString();
+                        string contrasena = reader["Contrasena"].ToString();
                         int idRol = Convert.ToInt32(reader["IdRol"]);
-                        if (form.Controls["cmbRol"] is ComboBox combo)
-                            combo.SelectedIndex = idRol - 1;
+                        bool estado = Convert.ToBoolean(reader["Estado"]);
 
-                        if (form.Controls["chkActivo"] is CheckBox chk)
-                            chk.Checked = Convert.ToBoolean(reader["Estado"]);
-
-                        reader.Close();
-
-                        if (form.ShowDialog() == DialogResult.OK)
-                            CargarUsuariosDesdeBD();
+                        using (var form = new FormUsuarioDetalle())
+                        {
+                            form.UsuarioId = idUsuario;
+                            form.CargarDatosUsuario(nombre, apellido, correo, contrasena, idRol, estado);
+                            if (form.ShowDialog(this) == DialogResult.OK)
+                                CargarUsuariosDesdeBD();
+                        }
                     }
                 }
             }
@@ -298,30 +307,23 @@ namespace UPC.SmartRetention.UI
             }
         }
 
-
-
-
         private void EliminarUsuario(int idUsuario)
         {
-            var confirm = MessageBox.Show("¿Seguro que deseas eliminar este usuario?", "Confirmar eliminación",
-                MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-
-            if (confirm != DialogResult.Yes) return;
+            if (MessageBox.Show("¿Seguro que deseas eliminar este usuario?", "Confirmar eliminación",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
+                return;
 
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
-                    string query = "DELETE FROM Usuarios WHERE Id = @Id";
-                    SqlCommand cmd = new SqlCommand(query, conn);
+                    SqlCommand cmd = new SqlCommand("DELETE FROM Usuarios WHERE Id = @Id", conn);
                     cmd.Parameters.AddWithValue("@Id", idUsuario);
                     cmd.ExecuteNonQuery();
                 }
-
                 MessageBox.Show("Usuario eliminado correctamente.", "Éxito",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
-
                 CargarUsuariosDesdeBD();
             }
             catch (Exception ex)
@@ -331,17 +333,54 @@ namespace UPC.SmartRetention.UI
             }
         }
 
+        private void DibujarTarjetaConSombra(object sender, PaintEventArgs e)
+        {
+            var panel = sender as Panel;
+            int radius = 14;
+            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
+            using (GraphicsPath shadowPath = RoundedRect(new Rectangle(6, 6, panel.Width - 12, panel.Height - 12), radius))
+            using (PathGradientBrush pgb = new PathGradientBrush(shadowPath))
+            {
+                pgb.CenterColor = Color.FromArgb(100, 0, 0, 0);
+                pgb.SurroundColors = new[] { Color.Transparent };
+                e.Graphics.FillPath(pgb, shadowPath);
+            }
+
+            using (GraphicsPath path = RoundedRect(new Rectangle(0, 0, panel.Width, panel.Height), radius))
+            using (SolidBrush brush = new SolidBrush(panel.BackColor))
+                e.Graphics.FillPath(brush, path);
+        }
+
+        private GraphicsPath RoundedRect(Rectangle r, int radius)
+        {
+            GraphicsPath path = new GraphicsPath();
+            int d = radius * 2;
+            path.AddArc(r.Left, r.Top, d, d, 180, 90);
+            path.AddArc(r.Right - d, r.Top, d, d, 270, 90);
+            path.AddArc(r.Right - d, r.Bottom - d, d, d, 0, 90);
+            path.AddArc(r.Left, r.Bottom - d, d, d, 90, 90);
+            path.CloseFigure();
+            return path;
+        }
     }
 
-    public static class ControlExtensions
+    // Extensión para dibujo redondeado
+    public static class GraphicsExtensions
     {
-        public static void DoubleBuffered(this Control control, bool enable)
+        public static void FillRoundedRectangle(this Graphics g, Brush brush, Rectangle bounds, int radius)
         {
-            System.Reflection.PropertyInfo aProp =
-                typeof(Control).GetProperty("DoubleBuffered",
-                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            aProp.SetValue(control, enable, null);
+            using (GraphicsPath path = new GraphicsPath())
+            {
+                int arc = radius * 2;
+                path.AddArc(bounds.Left, bounds.Top, arc, arc, 180, 90);
+                path.AddArc(bounds.Right - arc, bounds.Top, arc, arc, 270, 90);
+                path.AddArc(bounds.Right - arc, bounds.Bottom - arc, arc, arc, 0, 90);
+                path.AddArc(bounds.Left, bounds.Bottom - arc, arc, arc, 90, 90);
+                path.CloseFigure();
+                g.SmoothingMode = SmoothingMode.AntiAlias;
+                g.FillPath(brush, path);
+            }
         }
     }
 }

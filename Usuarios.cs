@@ -19,6 +19,8 @@ namespace UPC.SmartRetention.UI
         {
             this.Comentarios = new HashSet<Comentarios>();
             this.Publicaciones = new HashSet<Publicaciones>();
+            this.Cursos = new HashSet<Cursos>();
+            this.Matriculas = new HashSet<Matriculas>();
         }
     
         public int Id { get; set; }
@@ -35,5 +37,9 @@ namespace UPC.SmartRetention.UI
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Publicaciones> Publicaciones { get; set; }
         public virtual Roles Roles { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Cursos> Cursos { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Matriculas> Matriculas { get; set; }
     }
 }

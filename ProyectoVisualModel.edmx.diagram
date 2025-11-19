@@ -14,6 +14,25 @@
         <AssociationConnector Association="ProyectoVisualModel.FK_Comentarios_Usuarios" ManuallyRouted="false" />
         <AssociationConnector Association="ProyectoVisualModel.FK_Publicaciones_Usuarios" ManuallyRouted="false" />
         <AssociationConnector Association="ProyectoVisualModel.FK_Usuarios_Roles" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="ProyectoVisualModel.Asistencias" Width="1.5" PointX="10.125" PointY="9.625" />
+        <EntityTypeShape EntityType="ProyectoVisualModel.Cursos" Width="1.5" PointX="5.625" PointY="9.75" />
+        <EntityTypeShape EntityType="ProyectoVisualModel.Encuestas" Width="1.5" PointX="10.75" PointY="2.375" />
+        <EntityTypeShape EntityType="ProyectoVisualModel.Matriculas" Width="1.5" PointX="7.875" PointY="8" />
+        <EntityTypeShape EntityType="ProyectoVisualModel.Notas" Width="1.5" PointX="10.125" PointY="6.875" />
+        <EntityTypeShape EntityType="ProyectoVisualModel.Opciones" Width="1.5" PointX="15.25" PointY="1" />
+        <EntityTypeShape EntityType="ProyectoVisualModel.Preguntas" Width="1.5" PointX="13" PointY="2.25" />
+        <EntityTypeShape EntityType="ProyectoVisualModel.ProfesoresCursos" Width="1.5" PointX="0.75" PointY="6.75" />
+        <EntityTypeShape EntityType="ProyectoVisualModel.Respuestas" Width="1.5" PointX="15.25" PointY="3.625" />
+        <AssociationConnector Association="ProyectoVisualModel.FK_Asistencias_Matriculas" />
+        <AssociationConnector Association="ProyectoVisualModel.FK_Cursos_Usuarios" />
+        <AssociationConnector Association="ProyectoVisualModel.FK_Matriculas_Cursos" />
+        <AssociationConnector Association="ProyectoVisualModel.FK__Preguntas__IdEnc__06CD04F7" />
+        <AssociationConnector Association="ProyectoVisualModel.FK_Matriculas_Usuarios" />
+        <AssociationConnector Association="ProyectoVisualModel.FK_Notas_Matriculas" />
+        <AssociationConnector Association="ProyectoVisualModel.FK__Opciones__IdPreg__09A971A2" />
+        <AssociationConnector Association="ProyectoVisualModel.FK__Respuesta__IdPre__0C85DE4D" />
+        <EntityTypeShape EntityType="ProyectoVisualModel.vw_EstudiantesRiesgo" Width="1.5" PointX="0.75" PointY="9.75" />
+        <AssociationConnector Association="ProyectoVisualModel.FK_Encuestas_Cursos" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

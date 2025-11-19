@@ -30,7 +30,8 @@ namespace UPC.SmartRetention.UI
         {
             // ⚙️ Configuración base del formulario
             this.FormBorderStyle = FormBorderStyle.None;
-            this.StartPosition = FormStartPosition.CenterParent;
+            this.StartPosition = FormStartPosition.CenterScreen;
+            this.TopMost = true;
             this.Size = new Size(540, 750); // 👈 un poco más alto
             this.BackColor = Color.FromArgb(28, 29, 33);
             this.DoubleBuffered = true;
@@ -214,13 +215,48 @@ namespace UPC.SmartRetention.UI
                 return;
             }
 
-            // 🔹 Validar correo institucional UPC
+            // 🔹 Validar correo institucional UPC y limpiar
             string correo = txtCorreo.Text.Trim().ToLower();
             correo = new string(correo.Where(c => !char.IsWhiteSpace(c)).ToArray());
 
             if (!Regex.IsMatch(correo, @"^[a-zA-Z0-9._%+-]+@upc\.edu$"))
             {
                 FormNotificacion.Mostrar("Debes ingresar un correo institucional válido (@upc.edu).", "advertencia");
+                return;
+            }
+
+            // 🔹 Comprobar si el correo ya existe (excluyendo el usuario actual si estamos editando)
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlCommand cmd = new SqlCommand())
+                {
+                    cmd.Connection = conn;
+                    // Si UsuarioId tiene valor, excluimos ese Id; si no, comprobamos todos
+                    if (UsuarioId.HasValue && UsuarioId.Value != 0)
+                    {
+                        cmd.CommandText = "SELECT COUNT(1) FROM Usuarios WHERE LOWER(REPLACE(Correo, ' ', '')) = @Correo AND Id <> @Id";
+                        cmd.Parameters.AddWithValue("@Id", UsuarioId.Value);
+                    }
+                    else
+                    {
+                        cmd.CommandText = "SELECT COUNT(1) FROM Usuarios WHERE LOWER(REPLACE(Correo, ' ', '')) = @Correo";
+                    }
+                    cmd.Parameters.AddWithValue("@Correo", correo);
+
+                    await conn.OpenAsync();
+                    int count = Convert.ToInt32(await cmd.ExecuteScalarAsync());
+
+                    if (count > 0)
+                    {
+                        FormNotificacion.Mostrar("El correo ya está registrado en el sistema.", "advertencia");
+                        return;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                FormNotificacion.Mostrar("Error al validar el correo: " + ex.Message, "error");
                 return;
             }
 
@@ -231,6 +267,7 @@ namespace UPC.SmartRetention.UI
                 return;
             }
 
+            // Si todas las validaciones pasan, procede a guardar (INSERT o UPDATE)
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -239,7 +276,7 @@ namespace UPC.SmartRetention.UI
 
                     string query;
 
-                    // ✅ Nuevo registro si UsuarioId es NULL o 0
+                    // Nuevo registro si UsuarioId es NULL o 0
                     if (!UsuarioId.HasValue || UsuarioId.Value == 0)
                     {
                         query = @"INSERT INTO Usuarios 
@@ -248,7 +285,7 @@ namespace UPC.SmartRetention.UI
                     }
                     else
                     {
-                        // ✅ Edición existente (sí se enviará @Id correctamente)
+                        // Edición existente
                         query = @"UPDATE Usuarios SET 
                             Nombre = @Nombre, 
                             Apellido = @Apellido, 
@@ -268,7 +305,6 @@ namespace UPC.SmartRetention.UI
                         cmd.Parameters.AddWithValue("@IdRol", cmbRol.SelectedIndex + 1);
                         cmd.Parameters.AddWithValue("@Estado", chkActivo.Checked);
 
-                        // ✅ Agregar parámetro solo si es edición
                         if (UsuarioId.HasValue && UsuarioId.Value != 0)
                             cmd.Parameters.AddWithValue("@Id", UsuarioId.Value);
 
@@ -285,6 +321,7 @@ namespace UPC.SmartRetention.UI
                 FormNotificacion.Mostrar("Error al guardar el usuario: " + ex.Message, "error");
             }
         }
+
 
 
         private async void MostrarNotificacion(string mensaje, Color color)

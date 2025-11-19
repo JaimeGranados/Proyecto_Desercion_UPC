@@ -32,6 +32,16 @@ namespace UPC.SmartRetention.UI
         public virtual DbSet<Roles> Roles { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<Usuarios> Usuarios { get; set; }
+        public virtual DbSet<Asistencias> Asistencias { get; set; }
+        public virtual DbSet<Cursos> Cursos { get; set; }
+        public virtual DbSet<Encuestas> Encuestas { get; set; }
+        public virtual DbSet<Matriculas> Matriculas { get; set; }
+        public virtual DbSet<Notas> Notas { get; set; }
+        public virtual DbSet<Opciones> Opciones { get; set; }
+        public virtual DbSet<Preguntas> Preguntas { get; set; }
+        public virtual DbSet<ProfesoresCursos> ProfesoresCursos { get; set; }
+        public virtual DbSet<Respuestas> Respuestas { get; set; }
+        public virtual DbSet<vw_EstudiantesRiesgo> vw_EstudiantesRiesgo { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {

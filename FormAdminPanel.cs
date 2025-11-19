@@ -251,6 +251,12 @@ namespace UPC.SmartRetention.UI
                         case "Usuarios":
                             control = new UCUsuarios();
                             break;
+                        case "Estadísticas":
+                            control = new UCEstadisticas();
+                            break;
+                        case "Encuestas":
+                            control = new UCEncuestas();
+                            break;
                         default:
                             control = new Label()
                             {
@@ -262,6 +268,7 @@ namespace UPC.SmartRetention.UI
                             };
                             break;
                     }
+
 
                     control.Dock = DockStyle.Fill;
                     panelContenido.Controls.Add(control);
